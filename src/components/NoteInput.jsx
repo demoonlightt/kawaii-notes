@@ -16,21 +16,26 @@ class NoteInput extends React.Component {
   }
 
   onTitleChangeEventHandler(event) {
-    const value = event.target.value;
-    if (value.length <= 50) {
-      this.setState({ title: value });
-    }
+    const { value } = event.target;
+    this.setState(() => ({
+      title: value.slice(0, 50),
+    }));
   }
 
   onBodyChangeEventHandler(event) {
-    this.setState({ body: event.target.value });
+    const { value } = event.target;
+    this.setState(() => ({
+      body: value,
+    }));
   }
 
   onSubmitEventHandler(event) {
     event.preventDefault();
 
     if (this.state.body.length < 10) {
-      this.setState({ error: 'Isi catatan minimal 10 karakter.' });
+      this.setState(() => ({
+        error: 'Isi catatan minimal 10 karakter.',
+      }));
       return;
     }
 
@@ -39,23 +44,24 @@ class NoteInput extends React.Component {
       body: this.state.body,
     });
 
-    this.setState({
+    this.setState(() => ({
       title: '',
       body: '',
       error: '',
-    });
+    }));
   }
 
   render() {
-    const remainingChars = 50 - this.state.title.length;
+    const { title, body, error } = this.state;
+    const remainingChars = 50 - title.length;
 
     return (
       <div className="note-input" data-testid="note-input">
         <h2>Buat catatan</h2>
 
-        {this.state.error && (
+        {error && (
           <p className="note-input__feedback--error">
-            {this.state.error}
+            {error}
           </p>
         )}
 
@@ -73,7 +79,7 @@ class NoteInput extends React.Component {
             className="note-input__title"
             type="text"
             placeholder="Ini adalah judul ..."
-            value={this.state.title}
+            value={title}
             onChange={this.onTitleChangeEventHandler}
             required
             data-testid="note-input-title-field"
@@ -81,7 +87,7 @@ class NoteInput extends React.Component {
           <textarea
             className="note-input__body"
             placeholder="Tuliskan catatanmu di sini ..."
-            value={this.state.body}
+            value={body}
             onChange={this.onBodyChangeEventHandler}
             required
             data-testid="note-input-body-field"

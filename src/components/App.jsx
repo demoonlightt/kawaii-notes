@@ -16,12 +16,22 @@ class App extends React.Component {
     this.onAddNoteHandler = this.onAddNoteHandler.bind(this);
     this.onDeleteHandler = this.onDeleteHandler.bind(this);
     this.onArchiveHandler = this.onArchiveHandler.bind(this);
-    this.onSearchHandler = this.onSearchHandler.bind(this);
+    this.onSearchChangeHandler = this.onSearchChangeHandler.bind(this);
     this.onSelectNoteHandler = this.onSelectNoteHandler.bind(this);
     this.onCloseModalHandler = this.onCloseModalHandler.bind(this);
   }
 
   onAddNoteHandler({ title, body }) {
+    // Gunakan find() untuk cek apakah judul sudah ada (Array Function)
+    const isDuplicate = this.state.notes.find(
+      (note) => note.title.toLowerCase() === title.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      alert('Catatan dengan judul yang sama sudah ada!');
+      return;
+    }
+
     this.setState((prevState) => ({
       notes: [
         ...prevState.notes,
@@ -51,31 +61,41 @@ class App extends React.Component {
         }
         return note;
       }),
-      selectedNote: prevState.selectedNote?.id === id 
-        ? { ...prevState.selectedNote, archived: !prevState.selectedNote.archived }
-        : prevState.selectedNote,
+      selectedNote:
+        prevState.selectedNote?.id === id
+          ? { ...prevState.selectedNote, archived: !prevState.selectedNote.archived }
+          : prevState.selectedNote,
     }));
   }
 
-  onSearchHandler(keyword) {
-    this.setState({ searchKeyword: keyword });
+  onSearchChangeHandler(event) {
+    const { value } = event.target;
+    this.setState(() => ({
+      searchKeyword: value,
+    }));
   }
 
   onSelectNoteHandler(note) {
-    this.setState({ selectedNote: note });
+    this.setState(() => ({
+      selectedNote: note,
+    }));
   }
 
   onCloseModalHandler() {
-    this.setState({ selectedNote: null });
+    this.setState(() => ({
+      selectedNote: null,
+    }));
   }
 
   render() {
     const { notes, searchKeyword, selectedNote } = this.state;
 
+    // Array Function: filter() untuk pencarian
     const filteredNotes = notes.filter((note) =>
       note.title.toLowerCase().includes(searchKeyword.toLowerCase())
     );
 
+    // Array Function: filter() untuk memisah aktif & arsip
     const activeNotes = filteredNotes.filter((note) => !note.archived);
     const archivedNotes = filteredNotes.filter((note) => note.archived);
 
@@ -91,7 +111,7 @@ class App extends React.Component {
               type="text"
               placeholder="Cari catatan..."
               value={searchKeyword}
-              onChange={(e) => this.onSearchHandler(e.target.value)}
+              onChange={this.onSearchChangeHandler}
               data-testid="note-search-input"
             />
           </div>

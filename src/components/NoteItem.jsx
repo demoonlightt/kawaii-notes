@@ -1,18 +1,6 @@
 import React from 'react';
 import { showFormattedDate } from '../utils';
-
-function NoteActionButton({ variant, onClick, dataTestId, children }) {
-  return (
-    <button
-      className={`note-item__${variant}-button`}
-      type="button"
-      onClick={onClick}
-      data-testid={dataTestId}
-    >
-      {children}
-    </button>
-  );
-}
+import NoteButton from './NoteButton';
 
 function NoteItem({ note, onDelete, onArchive, searchKeyword, onSelectNote }) {
   const highlightText = (text, keyword) => {
@@ -40,8 +28,8 @@ function NoteItem({ note, onDelete, onArchive, searchKeyword, onSelectNote }) {
         <p className="note-item__date" data-testid="note-item-date">
           {showFormattedDate(note.createdAt)}
         </p>
-        <p 
-          className="note-item__body" 
+        <p
+          className="note-item__body"
           data-testid="note-item-body"
           style={{
             display: '-webkit-box',
@@ -53,26 +41,26 @@ function NoteItem({ note, onDelete, onArchive, searchKeyword, onSelectNote }) {
           {highlightText(note.body, searchKeyword)}
         </p>
       </div>
-      <div 
-        className="note-item__action" 
+      <div
+        className="note-item__action"
         data-testid="note-item-action"
         onClick={(e) => e.stopPropagation()}
       >
-        <NoteActionButton
+        <NoteButton
           variant="delete"
           onClick={() => onDelete(note.id)}
           dataTestId="note-item-delete-button"
         >
           Delete
-        </NoteActionButton>
+        </NoteButton>
 
-        <NoteActionButton
+        <NoteButton
           variant="archive"
           onClick={() => onArchive(note.id)}
           dataTestId="note-item-archive-button"
         >
           {note.archived ? 'Pindahkan' : 'Arsipkan'}
-        </NoteActionButton>
+        </NoteButton>
       </div>
     </div>
   );
