@@ -21,4 +21,7 @@ A cute, cozy, and aesthetically pleasing space to organize your thoughts, jot do
 
 Open http://localhost:3000 to start using your cute note-taking app! 🎉
 
+Here you can visit my website 
+https://kawaii-notes.vercel.app/
+
 Made with 💖 by demoonlightt
